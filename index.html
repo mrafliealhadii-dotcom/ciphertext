@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#163a28" />
+  <meta name="description" content="Website Kelompok 4 — Tool enkripsi dan dekripsi teks Caesar Cipher berbasis ASCII" />
+  <title>Website Kelompok 4 — Enkripsi & Dekripsi Teks</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:ital,wght@0,300;0,400;0,500;1,400&family=Outfit:wght@300;400;500;600;700&family=Syne:wght@700;800&display=swap" rel="stylesheet" />
+
+  <link rel="stylesheet" href="tampilan.css" />
+</head>
+<body>
+
+<!-- ── SIDEBAR OVERLAY ── -->
+<div class="sidebar-overlay" id="sidebarOverlay" onclick="closeSidebar()"></div>
+
+<!-- ── SIDEBAR DRAWER ── -->
+<nav class="sidebar" id="sidebar" aria-label="Menu navigasi">
+  <div class="sidebar-header">
+    <div class="sidebar-brand">
+      <img src="logo_unimed.png" alt="Logo Unimed" class="sidebar-logo-img" />
+      <div class="sidebar-brand-text">
+        <span class="sidebar-brand-name">Kelompok 4</span>
+        <span class="sidebar-brand-sub">Universitas Negeri Medan</span>
+      </div>
+    </div>
+    <button class="sidebar-close-btn" onclick="closeSidebar()" aria-label="Tutup menu">✕</button>
+  </div>
+
+  <div class="sidebar-nav">
+    <p class="sidebar-section-label">UTAMA</p>
+    <button class="sidebar-item active" id="nav-cipher" onclick="switchTab('cipher')">
+      <span class="sidebar-item-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+      </span>
+      <span class="sidebar-item-text">Cipher Tool</span>
+    </button>
+
+    <div class="sidebar-divider"></div>
+    <p class="sidebar-section-label">REFERENSI</p>
+
+    <button class="sidebar-item" id="nav-history" onclick="switchTab('history')">
+      <span class="sidebar-item-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+      </span>
+      <span class="sidebar-item-text">Riwayat</span>
+    </button>
+
+    <button class="sidebar-item" id="nav-ascii" onclick="switchTab('ascii')">
+      <span class="sidebar-item-icon">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+      </span>
+      <span class="sidebar-item-text">Tabel ASCII</span>
+    </button>
+  </div>
+
+  <div class="sidebar-footer">
+    <span class="sidebar-version">Kelompok 4 · UNIMED 2025</span>
+    <div class="sidebar-members">
+      <span>M.Raflie Alhadi</span>
+      <span>Abel Frans Lamsihar Sinaga</span>
+      <span>Mhd.Fadhlan Hawari</span>
+    </div>
+  </div>
+</nav>
+
+<!-- ── APP WRAPPER ── -->
+<div class="app-wrapper">
+
+  <!-- ── HEADER ── -->
+  <header class="site-header">
+
+    <!-- Hamburger -->
+    <button class="hamburger-btn" id="hamburgerBtn" onclick="toggleSidebar()" aria-label="Buka menu">
+      <span></span><span></span><span></span>
+    </button>
+
+    <!-- Logo Unimed -->
+    <div class="header-logo-wrap">
+      <img src="logo_unimed.png" alt="Logo Universitas Negeri Medan" class="header-logo-img" />
+    </div>
+
+    <!-- Title -->
+    <div class="logo-text">
+      <h1>Website Kelompok 4</h1>
+      <span>ENKRIPSI · DEKRIPSI · ANALISIS</span>
+    </div>
+
+    <!-- Badge (desktop only) -->
+    <div class="header-right">
+      <div class="header-badge">PROJEK KELOMPOK <span class="badge-ver">4</span></div>
+    </div>
+
+  </header>
+
+  <!-- ── MAIN CONTENT ── -->
+  <main class="main-content">
+
+    <!-- ══════════════════════════
+         TAB: CIPHER TOOL
+    ══════════════════════════ -->
+    <div id="tab-cipher" class="tab-content active">
+      <div class="main-grid">
+
+        <!-- INPUT PANEL -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-dots" aria-hidden="true">
+              <span class="panel-dot" style="--dot-color:#ff6b35"></span>
+              <span class="panel-dot" style="--dot-color:#f9c74f"></span>
+              <span class="panel-dot" style="--dot-color:#90be6d"></span>
+            </div>
+            <span class="panel-title">Input</span>
+          </div>
+          <div class="panel-body">
+            <div class="form-group">
+              <label for="inputText">Teks Plaintext / Ciphertext</label>
+              <textarea id="inputText"
+                placeholder="Ketik atau paste teks di sini..."
+                rows="5" autocomplete="off" spellcheck="false"></textarea>
+            </div>
+            <div class="key-row">
+              <div class="form-group key-group">
+                <label for="keyInput">Kunci Caesar (0 – 255)</label>
+                <input type="number" id="keyInput" min="0" max="255" value="13" inputmode="numeric" />
+              </div>
+              <div class="key-badge-wrap">
+                <div class="key-badge" id="keyBadge">Key: 13 → 'n'</div>
+              </div>
+            </div>
+            <div class="btn-row">
+              <button class="btn btn-encrypt" onclick="processText('encrypt')">
+                <span class="btn-icon">🔒</span>
+                <span class="btn-label">Enkripsi</span>
+              </button>
+              <button class="btn btn-decrypt" onclick="processText('decrypt')">
+                <span class="btn-icon">🔓</span>
+                <span class="btn-label">Dekripsi</span>
+              </button>
+              <button class="btn btn-reset" onclick="resetAll()">
+                <span class="btn-icon">↺</span>
+                <span class="btn-label">Reset</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- OUTPUT PANEL -->
+        <div class="panel">
+          <div class="panel-header">
+            <div class="panel-dots" aria-hidden="true">
+              <span class="panel-dot" style="--dot-color:#4cc9f0"></span>
+            </div>
+            <span class="panel-title">Output</span>
+            <div class="panel-header-right">
+              <span id="modeLabel" class="mode-label">—</span>
+            </div>
+          </div>
+          <div class="panel-body">
+            <label>Hasil</label>
+            <div class="output-box" id="outputBox">
+              <span class="output-placeholder">Hasil akan muncul di sini...</span>
+            </div>
+            <div class="cipher-stats" id="cipherStats" style="display:none">
+              <div class="stat-chip">Panjang: <span id="statLen">0</span></div>
+              <div class="stat-chip">Key: <span id="statKey">—</span></div>
+              <div class="stat-chip">Mode: <span id="statMode">—</span></div>
+              <div class="stat-chip">Unik: <span id="statUniq">0</span></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- VISUALISASI PANEL -->
+        <div class="panel span-full">
+          <div class="panel-header">
+            <div class="panel-dots" aria-hidden="true">
+              <span class="panel-dot" style="--dot-color:#c77dff"></span>
+            </div>
+            <span class="panel-title">Visualisasi Proses</span>
+            <span class="panel-subtitle">per karakter</span>
+          </div>
+          <div class="panel-body">
+            <div id="processVis">
+              <p class="process-hint" id="processHint">
+                Masukkan teks dan tekan Enkripsi / Dekripsi untuk melihat proses per karakter
+              </p>
+              <div id="processChars"></div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         TAB: HISTORY
+    ══════════════════════════ -->
+    <div id="tab-history" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-dots" aria-hidden="true">
+            <span class="panel-dot" style="--dot-color:#f9c74f"></span>
+          </div>
+          <span class="panel-title">Riwayat Operasi</span>
+          <div class="panel-header-right">
+            <button class="clear-history-btn" onclick="clearHistory()">Hapus Semua</button>
+          </div>
+        </div>
+        <div class="panel-body">
+          <div class="history-list" id="historyList">
+            <div class="history-empty">
+              <span class="history-empty-icon">⧗</span>
+              <span>Belum ada riwayat operasi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ══════════════════════════
+         TAB: TABEL ASCII
+    ══════════════════════════ -->
+    <div id="tab-ascii" class="tab-content">
+      <div class="panel">
+        <div class="panel-header">
+          <div class="panel-dots" aria-hidden="true">
+            <span class="panel-dot" style="--dot-color:#c77dff"></span>
+          </div>
+          <span class="panel-title">Tabel ASCII Lengkap</span>
+          <span class="panel-subtitle">0 – 255</span>
+        </div>
+        <div class="panel-body">
+          <div class="ascii-controls">
+            <div class="ascii-filter-group">
+              <button class="ascii-filter-btn active" onclick="filterAscii('all',this)">Semua</button>
+              <button class="ascii-filter-btn" onclick="filterAscii('printable',this)">Printable</button>
+              <button class="ascii-filter-btn" onclick="filterAscii('control',this)">Control</button>
+              <button class="ascii-filter-btn" onclick="filterAscii('extended',this)">Extended</button>
+            </div>
+            <input type="search" class="ascii-search" id="asciiSearch"
+                   placeholder="Cari desimal / karakter / hex..."
+                   oninput="searchAscii()" />
+          </div>
+          <div class="ascii-grid-wrap">
+            <table class="ascii-table">
+              <thead>
+                <tr>
+                  <th>Dec</th><th>Hex</th><th>Oct</th>
+                  <th>Bin</th><th>Char</th><th>Deskripsi</th>
+                </tr>
+              </thead>
+              <tbody id="asciiTableBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </main>
+
+  <!-- ── FOOTER ── -->
+  <footer class="site-footer">
+    <img src="logo_unimed.png" alt="" class="footer-logo" aria-hidden="true" />
+    <span>Kelompok 4 · Universitas Negeri Medan © 2025</span>
+    <span class="footer-sep">·</span>
+    <span>Caesar Cipher berbasis ASCII (0–255)</span>
+  </footer>
+
+</div><!-- /app-wrapper -->
+
+<!-- Toast -->
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<!-- Scripts -->
+<script src="tabelascii.js"></script>
+<script src="cipher.js"></script>
+<script src="history.js"></script>
+<script src="tampilanUI.js"></script>
+<script src="main.js"></script>
+
+<script>
+  function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const overlay = document.getElementById('sidebarOverlay');
+    const btn     = document.getElementById('hamburgerBtn');
+    const isOpen  = sidebar.classList.toggle('open');
+    overlay.classList.toggle('open', isOpen);
+    btn.classList.toggle('open', isOpen);
+    document.body.style.overflow = isOpen ? 'hidden' : '';
+  }
+
+  function closeSidebar() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('sidebarOverlay').classList.remove('open');
+    document.getElementById('hamburgerBtn').classList.remove('open');
+    document.body.style.overflow = '';
+  }
+
+  function switchTab(name) {
+    document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.sidebar-item').forEach(t => t.classList.remove('active'));
+    document.getElementById('tab-' + name).classList.add('active');
+    document.getElementById('nav-' + name).classList.add('active');
+    closeSidebar();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Escape') closeSidebar(); });
+</script>
+
+</body>
+</html>
